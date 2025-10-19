@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Reactive Portfolio — Black & Blue Theme</title>
+  <meta name="description" content="A reactive, single-file portfolio template with a sleek black-and-blue theme. Responsive, accessible and interactive." />
+
+  <!-- Internal CSS (black & blue theme) -->
+  <style>
+    /* ========== VARIABLES ========== */
+    :root{
+      --bg: #050507; /* almost black */
+      --panel: #0b0c10;
+      --blue-700: #0ea5e9; /* electric blue */
+      --blue-500: #2db7ff;
+      --muted: #9aa3ad;
+      --glass: rgba(255,255,255,0.03);
+      --glass-strong: rgba(255,255,255,0.05);
+      --radius: 14px;
+      --max-width: 1100px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Segoe UI Mono", monospace;
+      --ease: cubic-bezier(.2,.9,.3,1);
+    }
+
+    /* ========== BASE ========== */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,var(--bg) 0%, #070810 100%);
+      color:#e6eef7;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      padding:24px 20px;
+    }
+
+    /* Container */
+    .wrap{max-width:var(--max-width);margin:0 auto}
+
+    /* ========== NAV ========== */
+    header{
+      position:sticky;top:16px;z-index:40;backdrop-filter: blur(6px);
+    }
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding:10px;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.6);
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:44px;height:44px;border-radius:10px;display:grid;place-items:center;font-weight:700;
+      background:linear-gradient(135deg,var(--blue-500),var(--blue-700));color:#021;
+      box-shadow: 0 6px 18px rgba(14,165,233,0.12), inset 0 -6px 12px rgba(255,255,255,0.02);
+      font-family:var(--mono);
+    }
+    .brand h1{font-size:16px;margin:0}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+
+    nav ul{display:flex;gap:12px;margin:0;padding:0;list-style:none}
+    nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;transition:all .18s var(--ease)}
+    nav a:hover,nav a.active{color:var(--blue-500);background:var(--glass-strong)}
+
+    /* hamburger for small screens */
+    .hambtn{display:none;background:none;border:0;color:var(--blue-500);font-size:20px;padding:8px}
+
+    /* ========== HERO ========== */
+    .hero{
+      display:grid;grid-template-columns:1fr 420px;gap:28px;margin-top:24px;align-items:center;
+    }
+    .card{
+      background:linear-gradient(180deg,var(--panel), rgba(10,12,16,0.9));
+      border-radius:var(--radius);padding:28px;box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+    }
+    .intro h2{font-size:28px;margin:0 0 8px}
+    .intro p{color:var(--muted);margin:0 0 18px}
+
+    .ctas{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{
+      border:0;padding:10px 16px;border-radius:12px;font-weight:600;cursor:pointer;transition:transform .16s var(--ease), box-shadow .16s var(--ease);
+      background:linear-gradient(90deg,var(--blue-700),var(--blue-500));color:#021;box-shadow:0 8px 30px rgba(45,183,255,0.12);
+    }
+    .btn:active{transform:translateY(1px)}
+
+    .secondary{background:transparent;border:1px solid rgba(255,255,255,0.05);color:var(--muted)}
+
+    /* profile card */
+    .profile{
+      display:flex;gap:16px;align-items:center;padding:18px;border-radius:12px;background:linear-gradient(180deg,transparent, rgba(255,255,255,0.01));
+    }
+    .avatar{width:84px;height:84px;border-radius:12px;overflow:hidden;flex-shrink:0;border:1px solid rgba(255,255,255,0.04)}
+    .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+    .meta h3{margin:0 0 4px}
+    .meta p{margin:0;font-size:13px;color:var(--muted)}
+
+    /* ========== SECTIONS ========== */
+    section{margin-top:28px}
+    h3.section-title{font-size:18px;margin:0 0 12px;color:var(--blue-500)}
+
+    /* PROJECT GALLERY */
+    .projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .project{
+      border-radius:12px;overflow:hidden;position:relative;cursor:pointer;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      transition:transform .25s var(--ease), box-shadow .25s var(--ease);
+      border:1px solid rgba(255,255,255,0.03);
+    }
+    .project:hover{transform:translateY(-8px);box-shadow:0 18px 40px rgba(2,6,23,0.6)}
+    .project .thumb{height:160px;background-size:cover;background-position:center}
+    .project .info{padding:12px}
+    .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .tag{font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);color:var(--muted)}
+
+    /* Modal */
+    .modal{position:fixed;inset:0;display:none;place-items:center;background:linear-gradient(0deg, rgba(2,6,23,0.6), rgba(2,6,23,0.6));z-index:60}
+    .modal.open{display:grid}
+    .modal-card{width:min(900px,95%);background:linear-gradient(180deg,var(--panel),#06070a);padding:20px;border-radius:14px;border:1px solid rgba(255,255,255,0.03)}
+
+    /* SKILLS */
+    .skills{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .skill{background:var(--glass);padding:12px;border-radius:10px}
+    .skill .bar{height:10px;background:rgba(255,255,255,0.03);border-radius:8px;overflow:hidden;margin-top:8px}
+    .skill .bar > i{display:block;height:100%;width:0;transition:width .9s var(--ease);background:linear-gradient(90deg,var(--blue-700),var(--blue-500))}
+
+    /* TIMELINE */
+    .timeline{display:flex;flex-direction:column;gap:12px}
+    .timeline-item{display:flex;gap:12px;align-items:flex-start}
+    .timeline-dot{min-width:14px;height:14px;border-radius:50%;background:linear-gradient(90deg,var(--blue-700),var(--blue-500));box-shadow:0 6px 18px rgba(13,110,253,0.12)}
+    .timeline-body{background:rgba(255,255,255,0.02);padding:12px;border-radius:10px}
+
+    /* CONTACT */
+    form.contact{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    form.contact .full{grid-column:1/-1}
+    input,textarea{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:12px;border-radius:10px;color:inherit}
+    textarea{min-height:120px}
+    .muted{color:var(--muted);font-size:13px}
+
+    /* FOOTER */
+    footer{margin-top:28px;text-align:center;color:var(--muted);font-size:13px}
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr 320px}
+      .projects-grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:720px){
+      .nav ul{display:none}
+      .hambtn{display:inline-block}
+      .hero{grid-template-columns:1fr}
+      .projects-grid{grid-template-columns:1fr}
+      .skills{grid-template-columns:1fr}
+      form.contact{grid-template-columns:1fr}
+    }
+
+    /* small utility */
+    .muted-2{color:rgba(255,255,255,0.06)}
+    .fade-in{opacity:0;transform:translateY(8px);transition:all .6s var(--ease)}
+    .fade-in.show{opacity:1;transform:none}
+      .whatsapp-float {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background-color: #25d366;
+    border-radius: 50%;
+    padding: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 999;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .whatsapp-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+  }
+
+  .whatsapp-float img {
+    width: 40px;
+    height: 40px;
+  }
+
+  @media (max-width: 600px) {
+    .whatsapp-float {
+      bottom: 15px;
+      right: 15px;
+      padding: 10px;
+    }
+
+    .whatsapp-float img {
+      width: 35px;
+      height: 35px;
+    }
+  }
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="nav">
+        <div class="brand">
+          <div class="logo">RS</div>
+          <div>
+            <h1>Ramadhan Salim</h1>
+            <p class="muted">Full Stack Developer · Web Developer</p>
+          </div>
+        </div>
+
+        <nav>
+          <button class="hambtn" aria-label="Open menu">☰</button>
+          <ul>
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <main id="home" class="hero">
+      <div class="card intro fade-in" data-delay="0">
+        <p class="muted">Hello — I build polished web experiences</p>
+        <h2>World-class reactive portfolio — sleek, fast & modern</h2>
+        <p class="muted">I design and build interactive interfaces with attention to motion, accessibility and performance. Below are selected projects, skills and a timeline of my work.</p>
+
+        <div class="ctas">
+          <button class="btn" id="downloadCV">Download CV</button>
+          <button class="btn secondary" id="viewProjects">See Projects</button>
+        </div>
+
+        <div style="height:18px"></div>
+
+        <div class="profile">
+          <div class="avatar"><img src="wp8017861-8k-dark-wallpapers.jpg" alt="avatar" /></div>
+          <div class="meta">
+            <h3>Ramadhan Salim</h3>
+            <p class="muted">Nairobi, Kenya · Available for freelance</p>
+            <div class="muted-2" style="margin-top:8px">Open to remote roles · Specialises in React, HTML/CSS, animation</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="card fade-in" data-delay="100">
+        <h3 class="section-title">Quick stats</h3>
+        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:120px;background:var(--glass);padding:12px;border-radius:10px;text-align:center">
+            <div style="font-size:20px;font-weight:700">5+</div>
+            <div class="muted">Projects shipped</div>
+          </div>
+          <div style="flex:1;min-width:120px;background:var(--glass);padding:12px;border-radius:10px;text-align:center">
+            <div style="font-size:20px;font-weight:700">2+</div>
+            <div class="muted">Years experience</div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <h3 class="section-title">Contact</h3>
+          <div class="muted" style="font-size:13px;margin-top:6px">melanj23@gmail.com</div>
+          <div class="muted" style="font-size:13px">+254 784809224</div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- PROJECTS --><section id="projects" class="section">
+  <h2 class="section-title fade-in">Featured Projects</h2>
+  <div id="projectsGrid" class="projects-grid">
+    
+    <!-- Project 1 -->
+    <div class="project fade-in" tabindex="0" data-title="Portfolio Website" data-tags="frontend web">
+      <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=60');"></div>
+      <div class="project-content">
+        <h3>Personal Portfolio Website</h3>
+        <p>A modern, responsive portfolio built with HTML, CSS, and JavaScript.  
+        Features smooth animations, interactive sections, and a dark blue theme.</p>
+        <button class="btn" onclick="window.open('https://github.com/salimhac','_blank')">View on GitHub</button>
+      </div>
+    </div>
+
+    <!-- Project 2 -->
+    <div class="project fade-in" tabindex="0" data-title="Task Manager" data-tags="backend api">
+      <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1551033406-611cf9a28f67?auto=format&fit=crop&w=800&q=60');"></div>
+      <div class="project-content">
+        <h3>Task Manager API</h3>
+        <p>A RESTful API built using Node.js and Express for managing daily tasks.  
+        Includes user authentication, CRUD operations, and secure JWT tokens.</p>
+        <button class="btn" onclick="window.open('https://github.com/salimhac','_blank')">View on GitHub</button>
+      </div>
+    </div>
+
+    <!-- Project 3 -->
+    <div class="project fade-in" tabindex="0" data-title="Weather App" data-tags="frontend api">
+      <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=800&q=60');"></div>
+      <div class="project-content">
+        <h3>Weather Forecast App</h3>
+        <p>A sleek weather app that fetches real-time data from OpenWeatherMap API.  
+        Built with JavaScript and styled for mobile and desktop devices.</p>
+        <button class="btn" onclick="window.open('https://github.com/salimhac','_blank')">View on GitHub</button>
+      </div>
+    </div>
+
+    <!-- Project 4 -->
+    <div class="project fade-in" tabindex="0" data-title="Chat Room" data-tags="fullstack">
+      <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?auto=format&fit=crop&w=800&q=60');"></div>
+      <div class="project-content">
+        <h3>Real-Time Chat Room</h3>
+        <p>A real-time chat application using Socket.io and Node.js.  
+        Supports multiple users, message timestamps, and live user presence updates.</p>
+        <button class="btn" onclick="window.open('https://github.com/salimhac','_blank')">View on GitHub</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+    <!-- MODAL
+    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="modal-card">
+        <button id="closeModal" style="float:right;background:none;border:0;color:var(--muted);font-size:18px">✕</button>
+        <h3 id="modalTitle">Project Title</h3>
+        <p class="muted">Project description will appear here. Use this area to explain your role, tech used, challenges and the impact.</p>
+        <div style="height:12px"></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn" href="#" id="liveLink">View Live</a>
+          <a class="btn secondary" href="#" id="caseLink">Read Case Study</a>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- SKILLS & TIMELINE -->
+<section id="skills">
+  <div class="card fade-in" data-delay="300">
+    <h3 class="section-title">Skills</h3>
+    <p class="muted">Technologies and tools I use to build complete digital experiences.</p>
+
+    <div class="skills" style="margin-top:12px">
+      <!-- Frontend -->
+      <div class="skill">
+        <strong>HTML & CSS</strong>
+        <div class="bar"><i data-pct="95"></i></div>
+      </div>
+
+      <div class="skill">
+        <strong>JavaScript (ES6+)</strong>
+        <div class="bar"><i data-pct="92"></i></div>
+      </div>
+
+      <div class="skill">
+        <strong>React / Next.js</strong>
+        <div class="bar"><i data-pct="88"></i></div>
+      </div>
+
+      <div class="skill">
+        <strong>TypeScript</strong>
+        <div class="bar"><i data-pct="80"></i></div>
+      </div>
+
+      <!-- Backend -->
+      <div class="skill">
+        <strong>Node.js / Express</strong>
+        <div class="bar"><i data-pct="85"></i></div>
+      </div>
+
+      <div class="skill">
+        <strong>Python / Flask</strong>
+        <div class="bar"><i data-pct="75"></i></div>
+      </div>
+
+      <!-- Databases -->
+      <div class="skill">
+        <strong>MongoDB / Mongoose</strong>
+        <div class="bar"><i data-pct="82"></i></div>
+      </div>
+
+      <div class="skill">
+        <strong>MySQL / PostgreSQL</strong>
+        <div class="bar"><i data-pct="78"></i></div>
+      </div>
+
+      <!-- Tools -->
+      <div class="skill">
+        <strong>Git & GitHub</strong>
+        <div class="bar"><i data-pct="90"></i></div>
+      </div>
+
+      <div class="skill">
+        <strong>REST APIs / JSON</strong>
+        <div class="bar"><i data-pct="88"></i></div>
+      </div>
+
+      <div class="skill">
+        <strong>UI/UX Design Systems</strong>
+        <div class="bar"><i data-pct="84"></i></div>
+      </div>
+
+      <div class="skill">
+        <strong>Responsive & Accessibility</strong>
+        <div class="bar"><i data-pct="89"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+        <div style="margin-top:18px">
+          <h3 class="section-title">Timeline</h3>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-body">
+                <strong>2025 — Junior Frontend Dev</strong>
+                <div class="muted"> UI engineering and design systems</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-body">
+                <strong>2024 — Freelance & Product Work</strong>
+                <div class="muted">Multiple client projects focused on performance</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="card fade-in" data-delay="350">
+        <h3 class="section-title">About</h3>
+        <p class="muted">I’m a passionate Full-Stack Software Developer dedicated to building scalable, secure, and user-focused digital solutions. I blend creativity and technical precision to bring ideas to life — from intuitive front-end interfaces to robust back-end architectures.
+
+With a strong foundation in HTML, CSS, JavaScript, React, Node.js, and Python, I specialize in crafting seamless experiences that merge design and functionality. I love tackling complex challenges, optimizing performance, and turning abstract concepts into real, impactful products.
+
+Driven by curiosity and continuous learning, I stay up to date with modern frameworks and development practices. My mission is to deliver clean code, powerful features, and meaningful impact through technology — one project at a time.
+
+When I’m not coding, I’m exploring new tech trends, contributing to open-source projects, or designing innovative UI/UX concepts.</p>
+
+        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:220px;background:var(--glass);padding:12px;border-radius:10px">
+            <strong>Availability</strong>
+            <div class="muted" style="margin-top:6px">Open to freelance and long-term work.</div>
+          </div>
+
+          <div style="flex:1;min-width:220px;background:var(--glass);padding:12px;border-radius:10px">
+            <strong>Contact</strong>
+            <div class="muted" style="margin-top:6px">melanj23@gmail.com · +254 784809224</div>
+          </div>
+        </div>
+      </div>
+    </section>
+<!-- WhatsApp Floating Button -->
+<a href="https://wa.me/254784809224?text=Hello%20there!%20I%20visited%20your%20portfolio%20and%20would%20like%20to%20chat."
+   class="whatsapp-float" target="_blank" aria-label="Chat on WhatsApp">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+       alt="WhatsApp" />
+</a>
+
+    <!-- CONTACT --><section id="contact">
+  <div class="card fade-in" data-delay="380">
+    <h3 class="section-title">Contact</h3>
+    <p class="muted">
+      Prefer email? <span class="muted-2">melanj23@gmail.com</span>
+    </p>
+
+    <!-- Netlify Contact Form -->
+    <form 
+      name="contact" 
+      method="POST" 
+      data-netlify="true" 
+      netlify-honeypot="bot-field" 
+      class="contact"
+    >
+      <!-- Hidden fields for Netlify -->
+      <input type="hidden" name="form-name" value="contact">
+      <p style="display:none;">
+        <label>Don’t fill this out: <input name="bot-field"></label>
+      </p>
+
+      <!-- Visible inputs -->
+      <input name="name" placeholder="Your name" required />
+      <input name="email" placeholder="Your email" type="email" required />
+      <textarea name="message" placeholder="Message" class="full" required></textarea>
+
+      <div class="full" style="display:flex;justify-content:space-between;align-items:center">
+        <div class="muted">I reply within 12 hours.</div>
+        <button class="btn" type="submit">Send Message</button>
+      </div>
+    </form>
+
+    <!-- Optional success message -->
+    <p id="successMsg" class="muted-2" style="display:none;margin-top:10px;color:#00bcd4;">
+      ✅ Your message has been sent successfully!
+    </p>
+  </div>
+</section>
+
+
+    <footer class="fade-in" data-delay="420">© <span id="year"></span> Ramadhan Salim · Crafted with ❤️Silent B</footer>
+  </div>
+
+  <!-- JS: interactions, modal, filters, animations -->
+  <script>
+    // small helper
+    const $ = (sel, ctx=document) => ctx.querySelector(sel);
+    const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+
+    // NAV: mobile toggle
+    const hamb = document.querySelector('.hambtn');
+    const navUL = document.querySelector('nav ul');
+    hamb && hamb.addEventListener('click', ()=>{
+      const showing = navUL.style.display === 'flex';
+      navUL.style.display = showing ? 'none' : 'flex';
+    });
+
+    // Smooth scroll for nav links
+    $$('nav a').forEach(a=>{
+      a.addEventListener('click', e=>{
+        e.preventDefault();
+        $$('nav a').forEach(x=>x.classList.remove('active'));
+        a.classList.add('active');
+        const id = a.getAttribute('href').slice(1);
+        document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});
+      })
+    });
+
+    // // Projects modal
+    // const modal = $('#modal');
+    // const modalTitle = $('#modalTitle');
+    // const closeModal = $('#closeModal');
+
+    // $$('#projectsGrid .project').forEach(card=>{
+    //   const open = ()=>{
+    //     modal.classList.add('open');
+    //     modal.setAttribute('aria-hidden','false');
+    //     modalTitle.textContent = card.dataset.title || 'Project';
+    //     // focus trap: send focus to close button
+    //     closeModal.focus();
+    //   };
+    //   card.addEventListener('click', open);
+    //   card.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' ') open(); });
+    // });
+    // closeModal.addEventListener('click', ()=>{ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); });
+    // modal.addEventListener('click', e=>{ if(e.target === modal) { modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); } });
+
+    // Filters
+    $$('.tag[data-filter]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const f = btn.dataset.filter;
+        $$('.tag[data-filter]').forEach(x=>x.style.opacity=0.6);
+        btn.style.opacity=1;
+        $$('#projectsGrid .project').forEach(p=>{
+          if(f==='all') return p.style.display='block';
+          const tags = p.dataset.tags.split(/\s+/);
+          p.style.display = tags.includes(f) ? 'block' : 'none';
+        });
+      });
+    });
+
+    // Skills fill animation
+    function animateSkills(){
+      $$('[data-pct]').forEach(el=>{
+        const pct = parseInt(el.dataset.pct,10) || 0;
+        el.style.width = pct + '%';
+      });
+    }
+
+    // reveal on scroll
+    const observers = [];
+    const reveal = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('show');
+        }
+      });
+    }, {threshold:0.12});
+    $$('.fade-in').forEach((el, i)=>{ el.style.transitionDelay = (el.dataset.delay||i*80)+'ms'; reveal.observe(el); observers.push(reveal); });
+
+    // Animate skills when skills section comes into view
+    const skillsSection = document.getElementById('skills');
+    if(skillsSection){
+      const skillObserver = new IntersectionObserver((entries, obs)=>{
+        if(entries[0].isIntersecting){ animateSkills(); obs.disconnect(); }
+      }, {threshold:0.3});
+      skillObserver.observe(skillsSection);
+    }
+
+    // Show success message after submission
+  if (window.location.search.includes("success=true")) {
+    document.getElementById("successMsg").style.display = "block";
+  }
+
+// Download CV button
+
+  $('#downloadCV').addEventListener('click', () => {
+    // Replace the path below with your uploaded file URL or relative path
+    const fileUrl = '/files/Ramadhan Salim.docx'; 
+    const a = document.createElement('a');
+    a.href = fileUrl;
+    a.download = 'Ramadhan Salim.docx'; // Suggested filename
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+    // view projects quick link
+    $('#viewProjects').addEventListener('click', ()=>{ document.getElementById('projects').scrollIntoView({behavior:'smooth'}); });
+
+    // small accessibility niceties
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); } });
+
+    // set year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // small performance: lazy load images in thumbs
+    document.addEventListener('DOMContentLoaded', ()=>{
+      $$('.project .thumb').forEach((thumb)=>{
+        // nothing heavy here since backgrounds are set inline; consider replacing with <img loading="lazy"> for production.
+      });
+    });
+
+    // tiny micro-interactions: keyboard focus styles
+    document.body.addEventListener('keyup', ()=>document.documentElement.style.scrollBehavior='smooth');
+
+  </script>
+</body>
+</html>
