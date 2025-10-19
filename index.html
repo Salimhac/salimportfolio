@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Reactive Portfolio — Black & Blue Theme</title>
+  <title>Salim Ramadhan || Dev portfolio</title>
   <meta name="description" content="A reactive, single-file portfolio template with a sleek black-and-blue theme. Responsive, accessible and interactive." />
 
   <!-- Internal CSS (black & blue theme) -->
@@ -457,45 +457,29 @@ When I’m not coding, I’m exploring new tech trends, contributing to open-sou
   <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
        alt="WhatsApp" />
 </a>
-
-    <!-- CONTACT --><section id="contact">
+<section id="contact">
   <div class="card fade-in" data-delay="380">
     <h3 class="section-title">Contact</h3>
-    <p class="muted">
-      Prefer email? <span class="muted-2">melanj23@gmail.com</span>
-    </p>
+    <p class="muted">Prefer email? <span class="muted-2">hello@example.com</span></p>
 
-    <!-- Netlify Contact Form -->
-    <form 
-      name="contact" 
-      method="POST" 
-      data-netlify="true" 
-      netlify-honeypot="bot-field" 
-      class="contact"
-    >
-      <!-- Hidden fields for Netlify -->
-      <input type="hidden" name="form-name" value="contact">
-      <p style="display:none;">
-        <label>Don’t fill this out: <input name="bot-field"></label>
-      </p>
-
-      <!-- Visible inputs -->
+    <form name="contact" method="POST" data-netlify="true">
+      <input type="hidden" name="form-name" value="contact" />
       <input name="name" placeholder="Your name" required />
       <input name="email" placeholder="Your email" type="email" required />
       <textarea name="message" placeholder="Message" class="full" required></textarea>
 
       <div class="full" style="display:flex;justify-content:space-between;align-items:center">
-        <div class="muted">I reply within 12 hours.</div>
+        <div class="muted">I reply within 48 hours.</div>
         <button class="btn" type="submit">Send Message</button>
       </div>
     </form>
 
-    <!-- Optional success message -->
-    <p id="successMsg" class="muted-2" style="display:none;margin-top:10px;color:#00bcd4;">
+    <div id="successMsg" style="display:none;color:#4caf50;margin-top:10px;">
       ✅ Your message has been sent successfully!
-    </p>
+    </div>
   </div>
 </section>
+
 
 
     <footer class="fade-in" data-delay="420">© <span id="year"></span> Ramadhan Salim · Crafted with ❤️Silent B</footer>
